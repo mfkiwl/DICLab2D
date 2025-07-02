@@ -81,12 +81,16 @@ function AreaProbe(Input)
     dX = ShapeSubset(dX,SubsetSize,SubsetShape,d+1,d+1,d)
     dY = ShapeSubset(dY,SubsetSize,SubsetShape,d+1,d+1,d)
 
-    #local relative coordinates for points in the strain window
+    if ComputeStrains == true
 
-    dw = div(StrainWindowSize,2)
+        #local relative coordinates for points in the strain window
 
-    dXw = [i for j in 1:StrainWindowSize, i in -dw*GridStep:GridStep:dw*GridStep][:]      
-    dYw = [i for i in -dw*GridStep:GridStep:dw*GridStep, j in 1:StrainWindowSize][:]
+        dw = div(StrainWindowSize,2)
+
+        dXw = [i for j in 1:StrainWindowSize, i in -dw*GridStep:GridStep:dw*GridStep][:]      
+        dYw = [i for i in -dw*GridStep:GridStep:dw*GridStep, j in 1:StrainWindowSize][:]
+
+    end
 
     println("----- Initializing correlation","\n")
 
@@ -269,9 +273,9 @@ function SolvePOI!(Img,POI,x0,y0,F,dFdx,dFdy,d,dX,dY,InterpolationTable,InitialG
             
     end
         
-    f = SubsetMaker(F,SubsetSize,SubsetShape,x,y,d)           #gray-level values in current subset
-    dfdx = SubsetMaker(dFdx,SubsetSize,SubsetShape,x,y,d)     #gradients in current subset in the x direction
-    dfdy = SubsetMaker(dFdy,SubsetSize,SubsetShape,x,y,d)     #gradients in current subset in the y direction
+    f = ShapeSubset(F,SubsetSize,SubsetShape,x,y,d)           #gray-level values in current subset
+    dfdx = ShapeSubset(dFdx,SubsetSize,SubsetShape,x,y,d)     #gradients in current subset in the x direction
+    dfdy = ShapeSubset(dFdy,SubsetSize,SubsetShape,x,y,d)     #gradients in current subset in the y direction
 
     #correlate POI
 
